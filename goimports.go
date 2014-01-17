@@ -112,7 +112,7 @@ func processFile(filename string, in io.Reader, out io.Writer, stdin bool) error
 		return err
 	}
 
-	_, err = fixImports(file)
+	_, err = fixImports(fileSet, file)
 	if err != nil {
 		return err
 	}

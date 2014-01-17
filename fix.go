@@ -40,7 +40,7 @@ func importGroup(importPath string) int {
 	return 0
 }
 
-func fixImports(f *ast.File) (added []string, err error) {
+func fixImports(fset *token.FileSet, f *ast.File) (added []string, err error) {
 	// refs are a set of possible package references currently unsatisified by imports.
 	// first key: either base package (e.g. "fmt") or renamed package
 	// second key: referenced package symbol (e.g. "Println")
@@ -111,7 +111,7 @@ func fixImports(f *ast.File) (added []string, err error) {
 			return nil, result.err
 		}
 		if result.ipath != "" {
-			astutil.AddImport(f, result.ipath)
+			astutil.AddImport(fset, f, result.ipath)
 			added = append(added, result.ipath)
 		}
 	}
@@ -128,7 +128,7 @@ func fixImports(f *ast.File) (added []string, err error) {
 			// Don't remove cgo stuff.
 			continue
 		}
-		astutil.DeleteImport(f, ipath)
+		astutil.DeleteImport(fset, f, ipath)
 	}
 
 	return added, nil
